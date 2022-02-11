@@ -1,0 +1,19 @@
+/* .graph{
+    margin: 0;
+    width: 50%;
+    right:0;
+}
+
+.pie{
+
+    width: 50%;
+    right:0;
+} */
+
+
+.recharts-surface{
+    position:absolute;
+    top :0;
+    margin: 0;
+    width: 100%
+}

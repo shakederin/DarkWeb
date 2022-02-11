@@ -1,101 +1,57 @@
-const axios = require("axios");
-const { parse } = require("node-html-parser");
-const { addPaste, getPastes } = require("./Controll/mongoDB");
+const express = require("express");
+const cors = require("cors")
+const { addNewPastesToDB, extractNewestPastes } = require("./Controll/newPastes");
+const { scraper } = require("./Controll/strongholdPaste");
+const { getPastes } = require("./Controll/mongoDB");
+const app = express();
+const port = process.env.PORT || 8081
+const url = "http://strongerw2ise74v3duebgsvug4mehyhlpa7f6kfwnas7zofs3kov7yd.onion/all";
+const className = "#list > .row";
 
- //*********************get and orginize the data */
-const scraper = async (url, divSelector) => {
-    const htmlPasred = parse( await getWebsiteHTML(url));
-    const elements = htmlPasred.querySelectorAll(divSelector)
-    const aPastes = dataExtractor(elements)
-    return aPastes
-};
+app.use(cors());
+app.use(express.json());
+const usersRes = []
 
-const getWebsiteHTML = async (url) =>{
-    const response = await axios.get(url,
-        { proxy: { port: 8118, host: "localhost" } }
-    );
-    return response.data
-}
-
-const dataExtractor = (elements) =>{
-    const data = [] 
-    for (const element of elements) {
-        const authorDateElement = element.querySelector(".col-sm-6");
-        const titleElement = element.querySelector("h4");
-        const contentElement = element.querySelector(".text");
-        if(authorDateElement && titleElement && contentElement){
-            const _title = titleElement.innerText
-            const title = _title.replace(/\n|\t|&nbsp;/g, " ").trim();
-            const _content = contentElement.innerText
-            const content = _content.replace(/\n|\t|&nbsp;/g, " ").trim()
-            if(title.length < 4 || content.length < 4) continue;
-            const aAndD = authorDateElement.innerText.split(" ")
-            const author = aAndD[2]
-            const date = new Date(`${aAndD[4]}  ${aAndD[5]}  ${aAndD[6]}  ${aAndD[7]}`)
-            data.push({author: handleAuther(author), title, content, date})
+app.get("/paste/all", async (req, res) => {
+    res.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive"
+    });
+    const sendData = async () => {
+        await addNewPastesToDB(url, className);
+        const pastes = await getPastes();
+        console.log("sending:", pastes.length , "items");
+        res.write(`data: ${JSON.stringify(pastes)}\n\n`);
+    }
+    const sendUpdate = async () => {
+        const newPastes = await addNewPastesToDB(url, className);
+        if (usersRes.length !== 0) {
+            console.log("sending update of:", newPastes.length , "items");
+            res.write(`data: ${JSON.stringify(newPastes)}\n\n`);
         }
     }
-    return data
-}
+    await sendData();
+    setInterval(async () => {
+        console.log("im in loop");
+        await sendUpdate()
+    }, 1000 * 10 )
+})
 
-const handleAuther = (author) =>{
-    const sameOutput = ["Guest" , "Unknown" , "Anonymous", ""]
-    if(sameOutput.includes(author)){
-        return "Unknown"
-    }
-    return author
-}
- //********************************************* */
- 
-//******handle new pastes*********************** */
-const extractNewestPastes = async (url, divSelector) =>{
-    const aPastes = await scraper(url, divSelector);
-    const latestDate = await getLatestPasteDateFromDB();
-    const newPastes = [];
-    for(const paste of aPastes){
-        if(paste.date > latestDate){
-            newPastes.push(paste)
+app.listen(port, () => {
+    console.log("listening to", port);
+})
+
+
+
+const debounce = (fn, delay) => {
+    let timeoutID;
+    return function (...args) {
+        if (timeoutID) {
+            clearTimeout(timeoutID)
         }
+        timeoutID = setTimeout(() => {
+            fn(...args);
+        }, delay)
     }
-    return newPastes
-} 
-    
-const addNewPastesToDB = async (url, divSelector) =>{
-    const aPastes = await extractNewestPastes(url, divSelector);
-    if(!aPastes.length) return;
-    for(const paste of aPastes){
-        await addPaste(paste);
-    }
-} 
-
-const getLatestPasteDateFromDB = async () =>{
-    const aPastes = await getPastes();
-    let latestPaste =  new Date("0000-02-08T04:08:44.000Z")
-    for(const paste of aPastes){
-        if(paste.date > latestPaste){
-            latestPaste = paste.date;
-        }
-    }
-    return latestPaste;
 }
-
-//********************************************* */    
-    
-    
-    addNewPastesToDB(
-        "http://strongerw2ise74v3duebgsvug4mehyhlpa7f6kfwnas7zofs3kov7yd.onion/all",
-        "#list > .row",
-        );
-
-
-        const debounce = (fn, delay) =>{
-            let timeoutID;
-            return function(...args) {
-                if (timeoutID){
-                    clearTimeout(timeoutID)
-                }
-                timeoutID = setTimeout(()=>{
-                    fn(...args);
-                }, delay)
-            }
-        }

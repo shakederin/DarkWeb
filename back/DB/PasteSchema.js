@@ -17,9 +17,14 @@ const StrongholdPasteSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true
+    },
+    sentiment: {
+        type: String,
+        required: true
     }
 })
 
 const Paste = mongoose.model("stronghold_paste", StrongholdPasteSchema);
+
 
 module.exports = Paste;

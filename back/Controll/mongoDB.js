@@ -1,25 +1,26 @@
-const Paste = require("../DB/Schema");
+const Paste = require("../DB/PasteSchema");
 const  Mongoose  = require("mongoose");
+const MaxDate = require("../DB/MaxDateSchema");
+const axios = require("axios")
 require('dotenv').config();
 
 const connectionString = process.env.CONNECTIONSTRING;
-console.log(connectionString);
 
 Mongoose.connect(connectionString)
 .then(()=>{console.log("DB connected")})
-.catch((error)=>{'error connecting to MongoDB:', error.message});
+.catch((error)=>{ console.log('error connecting to MongoDB:', error.message)});
 
 
-exports.addPaste = async (extractedData, i)=>{
+exports.addPaste = async (extractedData)=>{
     const {title, author, date, content} = extractedData;
-
+    const sentiment = await findSantiment(content)
     if(await isPasteExists(date, content) === "error"){ 
-        console.log("error with DB", i)
+        console.log("error with DB")
         return;
     }
 
     if(await isPasteExists(date, content) ){ 
-        console.log("Paste already exists", i)
+        console.log("Paste already exists")
         return;
     }
 
@@ -27,14 +28,15 @@ exports.addPaste = async (extractedData, i)=>{
         title,
         author,
         date,
-        content
+        content,
+        sentiment
     }
 
     try {
         await Paste.insertMany(newPaste);
         console.log("Paste add successfully")
     } catch (error) {
-        console.log("couldn't add new user", i)
+        console.log(error.message)
     }
 }
 
@@ -46,13 +48,30 @@ const isPasteExists = async (date, content) =>{
         } 
         return false
     } catch (error) {
-        // console.log(error);
+        console.log(error, "error");
         return "error"
     }
 
 }
 
+exports.getLatestDate = async () =>{
+    const latestDate = await MaxDate.find({})
+    return latestDate;
+} 
+
 exports.getPastes = async () =>{
     const allPastes = await Paste.find({})
     return allPastes;
 } 
+
+const findSantiment = async (text) =>{
+    try {
+        const response = await axios.post("https://sentim-api.herokuapp.com/api/v1/", { 
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            text
+        }); 
+            return(response.data.result.type); 
+    } catch (error) {
+        console.log(error.message);
+    }
+}

@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const connectionString = process.env.CONNECTIONSTRING;
 
-Mongoose.connect("mongodb+srv://shaked:12345675@cluster0.jcfb0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+Mongoose.connect(connectionString)
 .then(()=>{console.log("DB connected")})
 .catch((error)=>{ console.log('error connecting to MongoDB:', error.message)});
 

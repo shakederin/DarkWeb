@@ -19,9 +19,10 @@ export default function CollapsibleTable(props) {
   const rows = props.pastes
   const createRow = () =>{
     if(!rows.length) return;
-    rows.map((row, i) => (
+    const allrows = rows.map((row, i) => (
      <Row key={`${row.date} +${i}`} row={row} />
     ))
+    return allrows
   }
 
   return (
@@ -37,9 +38,6 @@ export default function CollapsibleTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, i) => (
-            <Row key={`${row.date} +${i}`} row={row} />
-          ))}
           {createRow()}
         </TableBody>
       </Table>

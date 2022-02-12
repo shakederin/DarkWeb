@@ -1,17 +1,17 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import "../style/charts.css"
 
 export default function HoursChart(props) {
     const data = makePastesPerHourObject(props.pastes);
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) * 0.20
+    const vw = (Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)) * 0.40
   return  (
     <div className='graph'>
-        <h2>Pastes/Hour of the day</h2>
-        <BarChart width={1000} height={300} data={data}>
+        <BarChart width={vw} height={vh} data={data}>
             <XAxis dataKey="name" stroke="#8884d8"/>
             <YAxis />
             <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
-            <Legend width={100} wrapperStyle={{ top: 40, right: 20, backgroundColor: '#f5f5f5', border: '1px solid #d5d5d5', borderRadius: 3, lineHeight: '40px' }} />
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             <Bar dataKey="count" fill="#8884d8" barSize={30} />
         </BarChart>

@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const connectionString = process.env.CONNECTIONSTRING;
 
-Mongoose.connect("mongodb+srv://shaked:12345675@cluster0.jcfb0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+Mongoose.connect(connectionString)
 .then(()=>{console.log("DB connected")})
 .catch((error)=>{ console.log('error connecting to MongoDB:', error.message)});
 
@@ -92,16 +92,21 @@ const updateSentiment = async (sentiment) =>{
     }
 }
 
-
-
 const updatePastePerHour = async (hour) =>{
     const key = hour + ":00";
     const obj = {};
-
     obj[key] = 1 ;
+
     try {
         await Hours.updateOne({_id : "6206abdaf27e2ac3341bb98b"}, {$inc :obj, date : new Date()})
     } catch (error) {
         console.log(error.message);
     }
 }
+
+exports.get10Pastes = async (page) =>{
+    const tenPastes = await Paste.find({}).find().skip(page * 10).limit(10);
+    console.log(tenPastes, tenPastes.length);
+    return tenPastes
+}
+

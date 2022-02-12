@@ -28,13 +28,13 @@ export default function ContentType({pastes}) {
   },[pastes])
   return (
     <div className="pie">
-      <PieChart width={600} height={600}>
+      <PieChart  width={600} height={600}>
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
           data={data}
-          cx={300}
-          cy={300}
+          cx={250}
+          cy={250}
           innerRadius={120}
           outerRadius={160}
           dataKey="value"

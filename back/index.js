@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors")
 const { addNewPastesToDB, extractNewestPastes } = require("./Controll/newPastes");
-const { scraper } = require("./Controll/strongholdPaste");
 const { getPastes } = require("./Controll/mongoDB");
 const app = express();
 const port = process.env.PORT || 8081

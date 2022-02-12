@@ -1,12 +1,14 @@
-const Paste = require("../DB/PasteSchema");
+const Paste = require("../DBSchema/PasteSchema");
 const  Mongoose  = require("mongoose");
-const MaxDate = require("../DB/MaxDateSchema");
-const axios = require("axios")
+const MaxDate = require("../DBSchema/MaxDateSchema");
+const axios = require("axios");
+const Sentiment = require("../DBSchema/StatisticsSchema");
+const Hours = require("../DBSchema/PostsHoursSchema");
 require('dotenv').config();
 
 const connectionString = process.env.CONNECTIONSTRING;
 
-Mongoose.connect(connectionString)
+Mongoose.connect("mongodb+srv://shaked:12345675@cluster0.jcfb0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 .then(()=>{console.log("DB connected")})
 .catch((error)=>{ console.log('error connecting to MongoDB:', error.message)});
 
@@ -14,11 +16,11 @@ Mongoose.connect(connectionString)
 exports.addPaste = async (extractedData)=>{
     const {title, author, date, content} = extractedData;
     const sentiment = await findSantiment(content)
+    const hour = date.toString().substring(16, 18);
     if(await isPasteExists(date, content) === "error"){ 
         console.log("error with DB")
         return;
     }
-
     if(await isPasteExists(date, content) ){ 
         console.log("Paste already exists")
         return;
@@ -34,8 +36,11 @@ exports.addPaste = async (extractedData)=>{
 
     try {
         await Paste.insertMany(newPaste);
+        await updateSentiment(sentiment);
+        await updatePastePerHour(hour);
         console.log("Paste add successfully")
     } catch (error) {
+        console.log("here");
         console.log(error.message)
     }
 }
@@ -71,6 +76,31 @@ const findSantiment = async (text) =>{
             text
         }); 
             return(response.data.result.type); 
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const updateSentiment = async (sentiment) =>{
+    const key = sentiment;
+    const obj = {};
+    obj[key] = 1 ;
+    try {
+        await Sentiment.updateOne({_id : "620693306b5d6b64c9d12a70"}, {$inc :obj, date : new Date()})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+const updatePastePerHour = async (hour) =>{
+    const key = hour + ":00";
+    const obj = {};
+
+    obj[key] = 1 ;
+    try {
+        await Hours.updateOne({_id : "6206abdaf27e2ac3341bb98b"}, {$inc :obj, date : new Date()})
     } catch (error) {
         console.log(error.message);
     }

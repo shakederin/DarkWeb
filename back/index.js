@@ -35,7 +35,7 @@ app.get("/paste/all", async (req, res) => {
     setInterval(async () => {
         console.log("im in loop");
         await sendUpdate()
-    }, 1000 * 10 )
+    }, 1000 * 60 )
 })
 
 app.listen(port, () => {
@@ -55,3 +55,5 @@ const debounce = (fn, delay) => {
         }, delay)
     }
 }
+// query.skip(100).limit(20)
+// https://www.w3resource.com/mongodb/mongodb-skip-limit.php

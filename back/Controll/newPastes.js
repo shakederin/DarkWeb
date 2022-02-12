@@ -1,4 +1,4 @@
-const MaxDate = require("../DB/MaxDateSchema");
+const MaxDate = require("../DBSchema/MaxDateSchema");
 const { addPaste, getLatestDate } = require("./mongoDB");
 const { scraper } = require("./strongholdPaste");
     

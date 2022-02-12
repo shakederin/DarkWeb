@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 
 const SentimentStatistics = new mongoose.Schema({
     positive : {
-        type : String,
+        type : Number,
         required : true
     },
-    nagitive: {
-        type: String,
+    negative: {
+        type: Number,
         required: true
     },
-    natural: {
-        type: String,
+    neutral: {
+        type: Number,
         required: true,
     },
     unknown: {
-        type: String,
+        type: Number,
         required: true
     },
     date: {
@@ -24,7 +24,7 @@ const SentimentStatistics = new mongoose.Schema({
     }
 })
 
-const Sentiment = mongoose.model("stronghold_paste", SentimentStatistics);
+const Sentiment = mongoose.model("Sentiment", SentimentStatistics);
 
 
 module.exports = Sentiment;

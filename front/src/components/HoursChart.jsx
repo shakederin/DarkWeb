@@ -4,7 +4,7 @@ import "../style/charts.css"
 
 export default function HoursChart(props) {
     const data = makePastesPerHourObject(props.pastes);
-    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) * 0.20
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) * 0.22
     const vw = (Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)) * 0.40
   return  (
     <div className='graph'>

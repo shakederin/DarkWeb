@@ -17,6 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 export default function CollapsibleTable(props) { 
 
   const rows = props.pastes
+  const isFilterd = props.isFilterd;
   const createRow = () =>{
     if(!rows.length) return;
     const allrows = rows.map((row, i) => (
@@ -26,15 +27,16 @@ export default function CollapsibleTable(props) {
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer className='tableBody' component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow>
+          <TableRow> 
             <TableCell />
             <TableCell><h2>Title</h2></TableCell>
             <TableCell><h2>Author</h2></TableCell>
             <TableCell><h2>Date</h2></TableCell>
             <TableCell><h2>Time</h2></TableCell>
+            <TableCell><h2>Sentiment</h2></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -67,6 +69,7 @@ function Row(props) {
         <TableCell >{row.author}</TableCell>
         <TableCell >{row.date.toString().substring(0,10)}</TableCell>
         <TableCell >{row.date.toString().substring(11,19)}</TableCell>
+        <TableCell >{row.sentiment.toUpperCase()}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

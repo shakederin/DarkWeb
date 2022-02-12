@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors")
 const { addNewPastesToDB, extractNewestPastes } = require("./Controll/newPastes");
-const { getPastes } = require("./Controll/mongoDB");
+const { getPastes, getFilteredPastes, getAllSentiments, getAllPastesByHours } = require("./Controll/mongoDB");
 const app = express();
 const port = process.env.PORT || 8081
 const url = "http://strongerw2ise74v3duebgsvug4mehyhlpa7f6kfwnas7zofs3kov7yd.onion/all";
@@ -34,7 +34,25 @@ app.get("/paste/all", async (req, res) => {
     setInterval(async () => {
         console.log("im in loop");
         await sendUpdate()
-    }, 1000 * 60 )
+    }, (1000 * 60 ))
+})
+
+app.get("/filter", async (req, res)=>{
+    const input = req.query.input
+    const FilteredPastes = await getFilteredPastes(input)
+    res.send(FilteredPastes)
+})
+
+app.get("/sentiment", async (req, res)=>{
+    const allSentiments = await getAllSentiments()
+    console.log(allSentiments, allSentiments);
+    res.send(allSentiments)
+})
+
+app.get("/PasteByHour", async (req, res)=>{
+    const getAllPastesByHours = await getAllPastesByHours()
+    console.log(getAllPastesByHours, "getAllPastesByHours");
+    res.send(getAllPastesByHours)
 })
 
 app.listen(port, () => {
@@ -43,16 +61,6 @@ app.listen(port, () => {
 
 
 
-const debounce = (fn, delay) => {
-    let timeoutID;
-    return function (...args) {
-        if (timeoutID) {
-            clearTimeout(timeoutID)
-        }
-        timeoutID = setTimeout(() => {
-            fn(...args);
-        }, delay)
-    }
-}
+
 // query.skip(100).limit(20)
 // https://www.w3resource.com/mongodb/mongodb-skip-limit.php

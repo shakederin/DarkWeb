@@ -1,10 +1,17 @@
 body{
     background-color: rgb(228, 228, 228);
+    overflow-y: hidden;
 }
 #mainHeader{
     display: flex;
     justify-content: center;
 }
+.tableContainer{
+    height: 85vh;
+    overflow-y: scroll;
+}
+
+
 .dashboard{
     border: darkblue;
 }
@@ -12,7 +19,7 @@ body{
 .graphs{
     position:absolute;
     right :0;
-    margin: 0;
+    margin: 0 1% 0 0;
     width: 48%;
     height: 85%;
     background-color: cornsilk;

@@ -105,8 +105,37 @@ const updatePastePerHour = async (hour) =>{
 }
 
 exports.get10Pastes = async (page) =>{
-    const tenPastes = await Paste.find({}).find().skip(page * 10).limit(10);
-    console.log(tenPastes, tenPastes.length);
+    const tenPastes = await Paste.find().find().skip(page * 10).limit(10);
     return tenPastes
 }
 
+exports.getFilteredPastes = async (input, ) =>{
+    let regex = new RegExp(input,'i');
+    console.log(regex, "regex");
+    const tenPastes = await Paste.find({
+        $or: [
+            {title: { $regex: regex}},
+            {content: { $regex: regex}}
+        ]}).find();
+    return tenPastes
+}
+
+exports.getAllSentiments = async () =>{
+    try {
+       const allSentiments = await Sentiment.find({});
+       return allSentiments;
+    } catch (error) {
+        console.log(error.message, "getAllSentiments");
+    }
+}
+
+exports.getAllPastesByHours = async () =>{
+    try {
+       const allPastesByHours = await Hours.find({});
+       return allPastesByHours;
+    } catch (error) {
+        console.log(error.message, "getAllPastesByHours");
+    }
+}
+
+// .find().skip(page * 10).limit(10);

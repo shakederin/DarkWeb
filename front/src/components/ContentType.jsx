@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { PieChart, Pie, Sector } from "recharts";
 import { useEffect } from "react";
+import axios from "axios"
 import "../style/charts.css"
 
-export default function ContentType({pastes}) {
+export default function ContentType({pastes, isFiltered}) {
+  
   const [activeIndex, setActiveIndex] = useState(0);
   const [data, setData] = useState(0);
   const onPieEnter = useCallback(
@@ -16,16 +18,23 @@ export default function ContentType({pastes}) {
   useEffect(()=>{
     setData(pastes)
   },[])
-  console.log(data);
+
   useEffect(()=>{
-    console.log(data);
+    if(!isFiltered){
+      (async function getSavedData (){
+        const res = await axios.get("http://localhost:8081/sentiment")
+        console.log(res.data[0]);
+        const aOrder = dividePastsByContentSaved(res.data[0]);
+        console.log(aOrder);
+        setData(aOrder)
+      })()
+    }else{
     (async function getData (){
-      console.log(pastes);
-    const res = await dividePastsByContent(pastes)
-    console.log(res);
-    setData(res)
+      const res = await dividePastsByContent(pastes)
+      setData(res)
     })()
-  },[pastes])
+  }
+  },[pastes, isFiltered])
   return (
     <div className="pie">
       <PieChart  width={600} height={600}>
@@ -123,8 +132,8 @@ const renderActiveShape = (props) => {
 const dividePastsByContent = async (pastes) =>{
     const pastsContentType = [
         { name: "Positive", value: 0 ,fill:"green"},
-        { name: "Natural", value: 0 ,fill:"lightblue"},
-        { name: "Nagitive", value: 0 ,fill:"red"},
+        { name: "Neutral", value: 0 ,fill:"lightblue"},
+        { name: "Negative", value: 0 ,fill:"red"},
         { name: "Unknown", value: 0 ,fill:"grey"},
       ]
     
@@ -149,6 +158,16 @@ const dividePastsByContent = async (pastes) =>{
         continue;
       }
     }
-    console.log(pastsContentType);
     return pastsContentType
+}
+
+const dividePastsByContentSaved = (obj) =>{
+  const {positive, neutral, negative, unknown} = obj
+  const pastsContentType = [
+      { name: "Positive", value: positive ,fill:"green"},
+      { name: "Neutral", value: neutral ,fill:"lightblue"},
+      { name: "Negative", value: negative ,fill:"red"},
+      { name: "Unknown", value: unknown ,fill:"grey"},
+    ]
+    return pastsContentType;
 }

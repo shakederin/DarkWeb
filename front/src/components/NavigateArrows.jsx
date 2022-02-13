@@ -1,36 +1,42 @@
-import React, { useRef } from 'react'
-import ArrowBackIcon  from '@mui/icons-material/ArrowBack';
+import React, { useRef, useState } from 'react'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import axios from "axios"
 
-export default function NavigateArrows({setPaste}) {
-  let page = useRef(0)
+export default function NavigateArrows({ setPaste }) {
 
-  const changePage = async (bool) =>{
-    if(bool){
-      if(page !== 0){
-        page -= 1
+  const [page, setPage] = useState(0)
+  const [pastesCount, setPastesCount] = useState(10)
+
+  const changePage = async (bool) => {
+    let localPage;
+    if (!bool) {
+      if (page !== 0) {
+        setPage(page - 1)
+        localPage = page - 1
       }
-    }else{
-      page += 1
+    } else {
+      setPage(page + 1)
+      localPage = page + 1
     }
-    const res = await axios.get(`http://localhost:8081/pastes/ten`, { params: { page } });
-    console.log(res.data);
-    console.log(page, "page");
-
+    const res = await axios.get(`http://localhost:8081/pastes/ten`, { params: { page : localPage } });
+    setPastesCount(res.data.length)
     setPaste(res.data);
   }
   return (
 
     <div className='navigateArrows'>
-        <span onClick={async ()=>{await changePage(false)}} className='arrowBack'>
-            back
-            <ArrowBackIcon/>
+      {page === 0 ? <></> :
+        <span onClick={async () => { await changePage(false) }} className='arrow'>
+          back
+          <ArrowBackIcon />
         </span>
-        <span onClick={()=>{changePage(true)}} className='arrowNext'>
-            <ArrowForwardIcon/>
-            next 
-        </span>
+      }
+      page {page + 1} showing {pastesCount} results
+      <span onClick={() => { changePage(true) }} className='arrow'>
+        <ArrowForwardIcon />
+        next
+      </span>
     </div>
   )
 }

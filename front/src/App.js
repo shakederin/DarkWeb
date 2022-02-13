@@ -5,6 +5,7 @@ import HoursChart from './components/HoursChart';
 import axios from "axios"
 import NavigateArrows from './components/NavigateArrows';
 import "./style/charts.css"
+import { TextField } from '@mui/material';
 
 function App() {
   const [pastes, setPaste] = useState([])
@@ -29,7 +30,8 @@ function App() {
   }, [])
 
   const getFilteredPastes = async () => {
-    const params = searchInput.current.value
+    const params = searchInput.current.querySelector("#standard-search").value
+    console.log(params, "params");
     setIsFiltered(true)
     if (!params) {
       setIsFiltered(false)
@@ -44,11 +46,20 @@ function App() {
   return (
     <div className="App">
       <h1 id='mainHeader'>Pastes Dashboard</h1>
-      <input ref={searchInput}
+      <TextField
+          ref={searchInput}
+          className='searchBar'
+          id="standard-search"
+          label="Search field"
+          type="search"
+          variant="standard"
+          onChange={debounce(getFilteredPastes, 1000)}
+        />
+      {/* <input ref={searchInput}
         className='searchBar'
         onChange={debounce(getFilteredPastes, 1000)}
         placeholder='Search'
-      />
+      /> */}
       <div className='graphs'>
         <div className='graphrep'>
           <h2 className='graphHeader1'>Pastes/Hour Of The Day</h2>

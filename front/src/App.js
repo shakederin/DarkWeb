@@ -16,7 +16,6 @@ function App() {
     async function fetchData() {
       const source = new EventSource("http://localhost:8081/paste/all");
       source.onmessage = e => {
-        console.log("new data recived");
         const sorted = JSON.parse(e.data).sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0)).reverse();
         if (!isFiltered) {
           setPaste(preData => [...preData, ...sorted])
@@ -31,7 +30,6 @@ function App() {
 
   const getFilteredPastes = async () => {
     const params = searchInput.current.querySelector("#standard-search").value
-    console.log(params, "params");
     setIsFiltered(true)
     if (!params) {
       setIsFiltered(false)
@@ -48,6 +46,7 @@ function App() {
       <h1 id='mainHeader'>Pastes Dashboard</h1>
       <TextField
           ref={searchInput}
+          style={{marginLeft : "5%", width: "20%"}}
           className='searchBar'
           id="standard-search"
           label="Search field"
@@ -55,11 +54,8 @@ function App() {
           variant="standard"
           onChange={debounce(getFilteredPastes, 1000)}
         />
-      {/* <input ref={searchInput}
-        className='searchBar'
-        onChange={debounce(getFilteredPastes, 1000)}
-        placeholder='Search'
-      /> */}
+    <div className='pageContainer'>
+
       <div className='graphs'>
         <div className='graphrep'>
           <h2 className='graphHeader1'>Pastes/Hour Of The Day</h2>
@@ -70,10 +66,16 @@ function App() {
           <ContentType pastes={pastes} isFiltered={isFiltered} />
         </div>
       </div>
-      <div style={{ width: "50%", hight: "50%" }} className={isFiltered ? "tableContainer" : "tableContainer1"}>
-        <CollapsibleTable pastes={pastes} isFiltered={isFiltered} />
+
+      <div className='tableDiv'>
+        <div style={{ width: "50%", hight: "50%" }} className={isFiltered ? "tableContainer" : "tableContainer1"}>
+          <CollapsibleTable pastes={pastes} isFiltered={isFiltered} />
+        </div>
+        {isFiltered ? <></> : <NavigateArrows style={{ width: "50%"}} pastes={pastes} setPaste={setPaste} />}
       </div>
-      {isFiltered ? <></> : <NavigateArrows pastes={pastes} setPaste={setPaste} />}
+
+    </div>
+
     </div>
   );
 }

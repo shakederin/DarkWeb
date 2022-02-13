@@ -49,9 +49,7 @@ exports.addPaste = async (extractedData)=>{
         await Paste.insertMany(newPaste);
         await updateSentiment(sentiment);
         await updatePastePerHour(hour);
-        console.log("Paste add successfully")
     } catch (error) {
-        console.log("here");
         console.log(error.message)
     }
 }
@@ -118,13 +116,11 @@ const updatePastePerHour = async (hour) =>{
 exports.get10Pastes = async (page) =>{
     const count = await Paste.count({})
     const tenPastes = await Paste.find().sort({date: -1}).skip(page * 10).limit(10);
-    console.log(count, "count");
     return tenPastes
 }
 
 exports.getFilteredPastes = async (input, ) =>{
     let regex = new RegExp(input,'i');
-    console.log(regex, "regex");
     const tenPastes = await Paste.find({
         $or: [
             {title: { $regex: regex}},
@@ -149,6 +145,11 @@ exports.getAllPastesByHours = async () =>{
     } catch (error) {
         console.log(error.message, "getAllPastesByHours");
     }
+}
+
+exports.getAllPastesNumber = async () =>{
+    const count = await Paste.count({})
+    return count;
 }
 
 // .find().skip(page * 10).limit(10);

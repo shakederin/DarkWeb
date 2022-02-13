@@ -1,0 +1,22 @@
+version: "2.2"
+services:
+  server:
+    build: ./back
+    depends_on:
+      - tor
+    ports:
+      - "8081:8081"
+    environment:
+      - CONNECTIONSTRING=${CONNECTIONSTRING}
+  front:
+    build: ./front
+    ports:
+      - "3000:3000"
+  tor:
+    image: dperson/torproxy
+    container_name: tor-proxy
+    ports:
+      - "8118:8118"
+    expose:
+      - 8118
+    restart: always

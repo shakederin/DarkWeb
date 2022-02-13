@@ -1,11 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@700&family=Red+Hat+Display&display=swap');
 body{
-    background-color: rgb(228, 228, 228);
+    background-color: rgb(240, 219, 219);
     overflow-y: hidden;
+    font-family: 'Red Hat Display', sans-serif;
 }
 #mainHeader{
     display: flex;
     justify-content: center;
+    font-family: 'Prompt', sans-serif;
 }
+
+.searchBar{
+    margin-left:5%;
+}
+
+
 .tableContainer{
     height: 85vh;
     overflow-y: scroll;
@@ -15,10 +24,6 @@ body{
 }
 
 
-.dashboard{
-    border: darkblue;
-}
-
 .graphs{
     position:absolute;
     right :0;
@@ -26,11 +31,15 @@ body{
     width: 48%;
     height: 85%;
     background-color: cornsilk;
-    border-style: solid;
     display: grid;
     grid-template-columns: 10% 80% 10%;
     grid-template-rows: 10% 25% 10% 40%;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    border-radius: 4px;
 }
+
+
+
 .graphrep{
     display: grid;
     margin: 0%;
@@ -39,6 +48,7 @@ body{
     grid-template-rows: 40% 60% ;
 }
 .graphHeader1{
+    font-family: 'Prompt', sans-serif;
     display: flex;
     justify-content: center;
     margin: 0%;
@@ -48,6 +58,10 @@ body{
     display: flex;
     justify-content: center;
     grid-row: 2/3;
+}
+
+.tableContainer{
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .pierep{
@@ -60,6 +74,7 @@ body{
 }
 
 .graphHeader2{
+    font-family: 'Prompt', sans-serif;
     display: flex;
     justify-content: start;
     margin-left: 3%;
@@ -78,7 +93,15 @@ body{
     font-size: 20px;
 }
 .navigateArrows{
-    
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    text-align: center;
+    width: 50%;
+    padding: 0.7rem 0;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    border-bottom: 1px solid grey;
 }
 
 .arrow{

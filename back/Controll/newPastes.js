@@ -4,10 +4,7 @@ const { scraper } = require("./strongholdPaste");
     
 const addNewPastesToDB = async (url, divSelector) =>{
     const aPastes = await extractNewestPastes(url, divSelector);
-    // if(aPastes.length === 0){return aPastes};
-    console.log("now im adding", aPastes.length, "items");
     for(const paste of aPastes){
-        console.log("add-paste");
         await addPaste(paste);
     }
     return aPastes;
@@ -26,9 +23,7 @@ const extractNewestPastes = async (url, divSelector) =>{
             }
         }
     }
-    console.log("update Date now");
     await MaxDate.updateOne({_id:"62029c9ffce25054ef02abd5"}, {date: newLatestDate} )
-    console.log("their are ", newPastes.length, "new pastes");
     return newPastes
 } 
 

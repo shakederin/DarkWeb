@@ -19,7 +19,6 @@ export default function HoursChart({pastes, isFiltered}) {
           })()
         }else{
         (function getData (){
-            console.log(makePastesPerHourObject(pastes), "here");
             setData(makePastesPerHourObject(pastes))
         })()
       }
@@ -63,7 +62,6 @@ const makePastesPerHourObject =(data)=>{
            }
         }
     }
-    console.log(PastesPerHourObject, "PastesPerHourObject");
     return (PastesPerHourObject);
 }
 
@@ -79,7 +77,6 @@ const extractDataByHour = (obj) =>{
         const newObj = {name: key, count: value}
         timeArray.push(newObj)
     }
-    console.log(timeArray);
     return timeArray;
 }
 

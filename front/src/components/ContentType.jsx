@@ -19,9 +19,7 @@ export default function ContentType({pastes, isFiltered}) {
     if(!isFiltered){
       (async function getSavedData (){
         const res = await axios.get("http://localhost:8081/sentiment")
-        console.log(res.data[0]);
         const aOrder = dividePastsByContentSaved(res.data[0]);
-        console.log(aOrder);
         setData(aOrder)
       })()
     }else{

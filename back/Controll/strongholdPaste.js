@@ -11,8 +11,8 @@ exports.scraper = async (url, divSelector) => {
 const getWebsiteHTML = async (url) =>{
     try {
         const response = await axios.get(url,
-            // { proxy: { port: 8118, host: "tor-proxy" } }
-            { proxy: { port: 8118, host: "localhost" } }
+            { proxy: { port: 8118, host: "tor-proxy" } }
+            // { proxy: { port: 8118, host: "localhost" } }
         );
         return response.data
         

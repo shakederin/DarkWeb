@@ -9,13 +9,13 @@ export default function NavigateArrows({ setPaste }) {
   const [pastesCount, setPastesCount] = useState(10)
   const [pastesTotalCount, setPastesTotalCount] = useState(0)
 
-  useEffect(()=>{
-    (async function getPastesCount(){
+  useEffect(() => {
+    (async function getPastesCount() {
       const pastesCount = await axios.get("http://localhost:8081/pastes/count");
-      console.log(parseInt(pastesCount.data)/10)
+      console.log(parseInt(pastesCount.data) / 10)
       setPastesTotalCount(parseInt(pastesCount.data))
     })()
-  },[])
+  }, [])
 
   const changePage = async (bool) => {
     let localPage;
@@ -28,9 +28,9 @@ export default function NavigateArrows({ setPaste }) {
       setPage(page + 1)
       localPage = page + 1
     }
-      const res = await axios.get(`http://localhost:8081/pastes/ten`, { params: { page : localPage } });
-      setPastesCount(res.data.length)
-      setPaste(res.data);
+    const res = await axios.get(`http://localhost:8081/pastes/ten`, { params: { page: localPage } });
+    setPastesCount(res.data.length)
+    setPaste(res.data);
   }
   return (
     <div className='navigateArrows'>
@@ -41,7 +41,7 @@ export default function NavigateArrows({ setPaste }) {
         </span>
       }
       page {page + 1} showing {pastesCount} results out of {pastesTotalCount}
-      {(pastesTotalCount/10) < page  ? <></> :
+      {(pastesTotalCount / 10) < page + 1 ? <></> :
         <span onClick={() => { changePage(true) }} className='arrow'>
           <ArrowForwardIcon />
           next

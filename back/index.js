@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors")
-const { addNewPastesToDB, extractNewestPastes } = require("./Controll/newPastes");
-const { getPastes, getFilteredPastes, getAllSentiments, getAllPastesByHours, get10Pastes, getAllPastesNumber } = require("./Controll/mongoDB");
+const { addNewPastesToDB } = require("./Controll/newPastes");
+const { getFilteredPastes, getAllSentiments, getAllPastesByHours, get10Pastes, getAllPastesNumber } = require("./Controll/mongoDB");
 const app = express();
 const port = process.env.PORT || 8081
 const url = "http://strongerw2ise74v3duebgsvug4mehyhlpa7f6kfwnas7zofs3kov7yd.onion/all";
@@ -66,8 +66,3 @@ app.listen(port, () => {
     console.log("listening to", port);
 })
 
-
-
-
-// query.skip(100).limit(20)
-// https://www.w3resource.com/mongodb/mongodb-skip-limit.php

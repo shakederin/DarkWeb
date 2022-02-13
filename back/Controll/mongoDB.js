@@ -152,7 +152,7 @@ exports.getAllPastesNumber = async () =>{
     return count;
 }
 
-// .find().skip(page * 10).limit(10);
+
 
 
 

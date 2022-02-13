@@ -7,17 +7,13 @@ import "../style/charts.css"
 export default function ContentType({pastes, isFiltered}) {
   
   const [activeIndex, setActiveIndex] = useState(0);
-  const [data, setData] = useState(0);
+  const [data, setData] = useState(pastes);
   const onPieEnter = useCallback(
     (_, index) => {
       setActiveIndex(index);
     },
     [setActiveIndex]
   );
-
-  useEffect(()=>{
-    setData(pastes)
-  },[])
 
   useEffect(()=>{
     if(!isFiltered){
@@ -37,12 +33,12 @@ export default function ContentType({pastes, isFiltered}) {
   },[pastes, isFiltered])
   return (
     <div className="pie">
-      <PieChart  width={600} height={600}>
+      <PieChart  width={800} height={800}>
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
           data={data}
-          cx={250}
+          cx={400}
           cy={250}
           innerRadius={120}
           outerRadius={160}

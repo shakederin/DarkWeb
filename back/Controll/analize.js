@@ -38,14 +38,14 @@ const dividePastsByContent = async (pastes) =>{
       return pastsContentType
   }
   
-  const findSantiment = async (text) =>{
-      try {
-          const response = await axios.post("https://sentim-api.herokuapp.com/api/v1/", { 
-              headers: {"Accept": "application/json", "Content-Type": "application/json"},
-              text
-          }); 
-              return(response.data.result.type); 
-      } catch (error) {
-          console.log(error.message);
-      }
-  }
+const findSantiment = async (text) =>{
+    try {
+        const response = await axios.post("https://sentim-api.herokuapp.com/api/v1/", { 
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            text
+        }); 
+            return(response.data.result.type); 
+    } catch (error) {
+        console.log(error.message);
+    }
+}

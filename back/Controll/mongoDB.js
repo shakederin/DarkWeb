@@ -8,10 +8,21 @@ require('dotenv').config();
 
 const connectionString = process.env.CONNECTIONSTRING;
 
+const connectToMongo = () =>{
+let flag = false;
 Mongoose.connect(connectionString)
 .then(()=>{console.log("DB connected")})
-.catch((error)=>{ console.log('error connecting to MongoDB:', error.message)});
-
+.catch((error)=>{ 
+    flag = true;
+    console.log('error connecting to MongoDB: "timeuot!')
+})
+.finally(()=>{
+    if(flag){
+        connectToMongo()
+    }
+});
+}
+connectToMongo()
 
 exports.addPaste = async (extractedData)=>{
     const {title, author, date, content} = extractedData;
@@ -105,7 +116,9 @@ const updatePastePerHour = async (hour) =>{
 }
 
 exports.get10Pastes = async (page) =>{
-    const tenPastes = await Paste.find().find().skip(page * 10).limit(10);
+    const count = await Paste.count({})
+    const tenPastes = await Paste.find().sort({date: -1}).skip(page * 10).limit(10);
+    console.log(count, "count");
     return tenPastes
 }
 
@@ -139,3 +152,14 @@ exports.getAllPastesByHours = async () =>{
 }
 
 // .find().skip(page * 10).limit(10);
+
+
+
+
+
+
+
+
+
+
+

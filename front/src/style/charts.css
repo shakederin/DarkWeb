@@ -10,6 +10,9 @@ body{
     height: 85vh;
     overflow-y: scroll;
 }
+.tableContainer2{
+    height: 85vh;
+}
 
 
 .dashboard{
@@ -57,7 +60,7 @@ body{
 
 .graphHeader2{
     display: flex;
-    justify-content: center;
+    align-items: center;
     margin: 0%;
     grid-row: 1/2;
 }
